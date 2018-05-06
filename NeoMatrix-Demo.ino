@@ -61,7 +61,8 @@ Adafruit_NeoMatrix *matrix = new Adafruit_NeoMatrix(mw, mh, PIN,
 #include "MatrixColors.h"
 
 // the setup routine runs once when you press reset:
-    void setup() {
+void setup() {
+    Serial.begin(115200);
     matrix->begin();
     matrix->setBrightness(BRIGHTNESS);
     // Test full bright of all LEDs. If brightness is too high
@@ -74,50 +75,49 @@ Adafruit_NeoMatrix *matrix = new Adafruit_NeoMatrix(mw, mh, PIN,
 
 // the loop routine runs over and over again forever;
 void loop() {
-  
+// rainbowCycle(50); 
  load_panel(LED_RED_HIGH, 50);
- load_panel(LED_GREEN_HIGH, 50);
- load_panel(LED_BLUE_HIGH, 50);
- unload_panel(LED_BLACK, 50);                    
- colorallfill(LED_GREEN_HIGH, 500);           
- colorallfill(LED_ORANGE_HIGH, 500);           
- colorallfill(LED_CYAN_HIGH, 500);           
- colorallfill(LED_WHITE_HIGH, 500);           
+ unload_panel(LED_GREEN_HIGH, 50); 
+ load_panel(LED_ORANGE_HIGH, 10);
+ unload_panel(LED_BLACK, 10);                    
+ color_all_fill(LED_RED_HIGH, 500);           
+ color_all_fill(LED_GREEN_HIGH, 500);           
+ color_all_fill(LED_ORANGE_HIGH, 500);           
  matrix->clear();
          
  // Fills the NeoMatrix 8X8 panel in a spiral then revers's it 
- spiral_colorWipe(LED_RED_HIGH, 50); 
- reverse_spiral_colorWipe(LED_GREEN_MEDIUM, 50); 
- onepixel_spiral_colorWipe(LED_BLUE_HIGH, 50); 
- reverse_spiral_colorWipe(LED_GREEN_HIGH, 50); 
- spiral_colorWipe(LED_ORANGE_HIGH, 50); 
- reverse_spiral_colorWipe(LED_CYAN_HIGH, 50); 
- onepixel_spiral_colorWipe(LED_PURPLE_HIGH, 50); 
- reverse_spiral_colorWipe(LED_ORANGE_HIGH, 50);         
- colorallfill(LED_BLACK, 250);
+ spiral_color_wipe(LED_RED_HIGH, 50); 
+ reverse_spiral_color_wipe(LED_GREEN_MEDIUM, 50); 
+ one_pixel_spiral_color_wipe(LED_PURPLE_HIGH, 20); 
  matrix->clear();        
 
  // Fills the NeoMatrix 8X8 panel using one 4X4 minimatrix at a time in the 8X8 panel
- fourmatrixes_colorWipe(LED_RED_HIGH, 50);
- fourmatrixes_colorWipe(LED_GREEN_HIGH, 50); 
- fourmatrixes_colorWipe(LED_ORANGE_HIGH, 50); 
+ four_matrixes_color_wipe(LED_RED_HIGH, 50);
+ reverse_four_matrixes_color_wipe(LED_GREEN_HIGH, 50); 
+ one_pixel_four_matrixes_color_wipe(LED_ORANGE_HIGH, 50); 
  matrix->clear(); 
              
- // Fills the NeoMatrix 8X8 panel using all of the 4X4 minimatrix at the same time in the 8X8 panel
- fourmatrixes_same_colorWipe(LED_RED_HIGH, 50); 
- fourmatrixes_same_colorWipe(LED_GREEN_HIGH, 50);
- fourmatrixes_same_colorWipe(LED_ORANGE_HIGH, 50); 
+ // Fills the NeoMatrix 8X8 panel using all of the 4X4 minimatrix 
+ // at the same time in the 8X8 panel
+ four_matrixes_same_color_wipe(LED_RED_HIGH, 50); 
+ reverse_four_matrixes_same_color_wipe(LED_GREEN_HIGH, 50);
+ one_pixel_four_matrixes_same_color_wipe(LED_RED_HIGH, 50); 
+ four_matrixes_same_color_wipe(LED_ORANGE_HIGH, 50); 
+ reverse_one_pixel_four_matrixes_same_color_wipe(LED_GREEN_HIGH, 50);
  matrix->clear();
-    
-/*            
- // Fills the NeoMatrix 8X8 panel with with split spiral one full box at a time  
- split_spiral_colorWipe(matrix->Color(0, 50, 0), 100); //red reverse spiral   
- split_spiral_colorWipe(matrix->Color(50, 0, 0), 100); //blue reverse spiral
- split_spiral_colorWipe(matrix->Color(50, 50, 0), 100); //red reverse spiral 
- colorallfill(matrix->Color(0, 0, 0), 250);          // clears color
-*/     
 
-}
+ split_spiral_color_wipe(LED_RED_HIGH, 50);
+ reverse_split_spiral_color_wipe(LED_GREEN_HIGH, 50);
+ one_pixel_split_spiral_color_wipe(LED_RED_HIGH, 50);
+ reverse_split_spiral_color_wipe(LED_GREEN_HIGH, 25);
+ one_pixel_split_spiral_color_wipe(LED_RED_HIGH, 25);
+ reverse_one_pixel_split_spiral_color_wipe(LED_RED_HIGH, 10);
+ one_pixel_split_spiral_color_wipe(LED_GREEN_HIGH, 5);
+ reverse_one_pixel_split_spiral_color_wipe(LED_RED_HIGH, 5);
+
+ matrix->clear();
+
+} // End of main Loop
 
 // Functions for loop -----------------------------------------------------------------
 
@@ -139,7 +139,7 @@ void unload_panel(int c, uint16_t wait){
 }
 
 // Fills the NeoMatrix 8X8 panel with in a spiral -  one neopixel after the other
-void spiral_colorWipe(int c, uint16_t wait) {    
+void spiral_color_wipe(int c, uint16_t wait) {    
   for(uint16_t j=0; j<4; j++) {
    uint16_t x=boxtotalarray[j];
     for(uint16_t k=0; k<x; k++) {
@@ -150,24 +150,12 @@ void spiral_colorWipe(int c, uint16_t wait) {
    }
 }
 
-// test fills color into NeoMatrix 8X8 panel with in a spiral -  one neopixel after the other
-void test_spiral_colorWipe(int c, uint16_t wait) {    
-  for(uint16_t j=0; j<4; j++) {
-    uint16_t x=boxtotalarray[j];
-    for(uint16_t k=0; k<x; k++) {
-      matrix->setPixelColor(bigboxarray[j][k], c);     
-      matrix->show();
-      delay(wait);
-     }
-   }
-}
-
 // Fills the NeoMatrix 8X8 panel with in a reverse spiral -  one neopixel after the other
-void reverse_spiral_colorWipe(int c, uint16_t wait) {    
-  for(uint16_t j=0; j<4; j++) {
-    uint16_t x=revboxtotalarray[j];
-    for(uint16_t k=0; k<x; k++) {
-      matrix->setPixelColor(revbigboxarray[j][k], c);      
+void reverse_spiral_color_wipe(int c, int wait) {    
+  for(int j=3; j>=0; j--) {
+    int x=boxtotalarray[j];
+    for(int k=x-1; k>=0; k--) {
+      matrix->setPixelColor(bigboxarray[j][k], c); 
       matrix->show();
       delay(wait);
      }
@@ -175,7 +163,7 @@ void reverse_spiral_colorWipe(int c, uint16_t wait) {
 }
 
 // Fills the each of 4 seperate 4X4 matrixes in the NeoMatrix 8X8 panel with in a spiral -  one neopixel after the other
-void fourmatrixes_colorWipe(int c, uint16_t wait) {    
+void four_matrixes_color_wipe(int c, uint16_t wait) {    
    for(uint16_t j=0; j<4; j++) {
     for(uint16_t k=0; k<16; k++) {
       matrix->setPixelColor(bigfourarray[j][k], c);     
@@ -184,9 +172,78 @@ void fourmatrixes_colorWipe(int c, uint16_t wait) {
       }
   }
 }  
+// Fills the each of 4 seperate 4X4 matrixes in the NeoMatrix 8X8 panel with in a spiral -  one neopixel after the other
+void reverse_four_matrixes_color_wipe(int c, uint16_t wait) {    
+   for(int j=3; j>=0; j--) {
+    for(int k=15; k>=0; k--) {
+      matrix->setPixelColor(bigfourarray[j][k], c);     
+      matrix->show();
+      delay(wait);
+      }
+  }
+} 
+// Fills the each of 4 seperate 4X4 matrixes in the NeoMatrix 8X8 panel with in a spiral -  one neopixel after the other
+void one_pixel_four_matrixes_color_wipe(int c, uint16_t wait) {    
+   for(uint16_t j=0; j<4; j++) {
+    for(uint16_t k=0; k<16; k++) {
+      matrix->setPixelColor(bigfourarray[j][k], c);     
+      matrix->show();
+      delay(wait);
+      matrix->setPixelColor(bigfourarray[j][k], 0);     
+      matrix->show();
+      }
+  }
+}  
+// Fills the each of 4 seperate 4X4 matrixes in the NeoMatrix 8X8 panel with in a spiral -  one neopixel after the other
+void reverse_one_pixel_four_matrixes_color_wipe(int c, uint16_t wait) {    
+   for(int j=3; j>=0; j--) {
+    for(int k=15; k>=0; k--) {
+      matrix->setPixelColor(bigfourarray[j][k], c);     
+      matrix->show();
+      delay(wait);
+      matrix->setPixelColor(bigfourarray[j][k], 0);     
+      matrix->show();
+      }
+  }
+}  
+// Fills the all of the 4 seperate 4X4 matrixes in the 
+// NeoMatrix 8X8 panel in a spiral -  one neopixel at a time in each cube
+void one_pixel_four_matrixes_same_color_wipe(int c, uint16_t wait) { 
+  for(uint16_t k=0; k<16; k++) {
+      matrix->setPixelColor(bigfourarray[0][k], c);    
+      matrix->setPixelColor(bigfourarray[1][k], c); 
+      matrix->setPixelColor(bigfourarray[2][k], c); 
+      matrix->setPixelColor(bigfourarray[3][k], c);  
+      matrix->show();
+      delay(wait);
+      matrix->setPixelColor(bigfourarray[0][k], 0);    
+      matrix->setPixelColor(bigfourarray[1][k], 0); 
+      matrix->setPixelColor(bigfourarray[2][k], 0); 
+      matrix->setPixelColor(bigfourarray[3][k], 0);  
+      matrix->show();
+    }
+}  
+// Fills the all of the 4 seperate 4X4 matrixes in the 
+// NeoMatrix 8X8 panel in a spiral -  one neopixel at a time in each cube
+void reverse_one_pixel_four_matrixes_same_color_wipe(int c, uint16_t wait) { 
+  for(int k=15; k>=0; k--) {
+      matrix->setPixelColor(bigfourarray[0][k], c);    
+      matrix->setPixelColor(bigfourarray[1][k], c); 
+      matrix->setPixelColor(bigfourarray[2][k], c); 
+      matrix->setPixelColor(bigfourarray[3][k], c);  
+      matrix->show();
+      delay(wait);
+      matrix->setPixelColor(bigfourarray[0][k], 0);    
+      matrix->setPixelColor(bigfourarray[1][k], 0); 
+      matrix->setPixelColor(bigfourarray[2][k], 0); 
+      matrix->setPixelColor(bigfourarray[3][k], 0);  
+      matrix->show();
+    }
+}  
 
-// Fills the all of the 4 seperate 4X4 matrixes in the NeoMatrix 8X8 panel in a spiral -  one neopixel after the other
-void fourmatrixes_same_colorWipe(int c, uint16_t wait) { 
+// Fills the all of the 4 seperate 4X4 matrixes in the 
+// NeoMatrix 8X8 panel in a spiral -  one neopixel after another in each cube
+void four_matrixes_same_color_wipe(int c, uint16_t wait) { 
   for(uint16_t k=0; k<16; k++) {
       matrix->setPixelColor(bigfourarray[0][k], c);    
       matrix->setPixelColor(bigfourarray[1][k], c); 
@@ -195,11 +252,23 @@ void fourmatrixes_same_colorWipe(int c, uint16_t wait) {
       matrix->show();
       delay(wait);
     }
-}  
-
+} 
+// Fills the all of the 4 seperate 4X4 matrixes in the 
+// NeoMatrix 8X8 panel in a spiral -  one neopixel after another in each cube
+void reverse_four_matrixes_same_color_wipe(int c, uint16_t wait) { 
+  for(int k=15; k>=16; k--) {
+      matrix->setPixelColor(bigfourarray[3][k], c);    
+      matrix->setPixelColor(bigfourarray[2][k], c); 
+      matrix->setPixelColor(bigfourarray[1][k], c); 
+      matrix->setPixelColor(bigfourarray[0][k], c);  
+      matrix->show();
+      delay(wait);
+    }
+} 
+ 
 //Fills the NeoMatrix 8X8 panel half a side at a time together
-void split_spiral_colorWipe(int c, uint16_t wait) {    
-  for(uint16_t j=0; j<8; j+=2) {
+void split_spiral_color_wipe(int c, uint16_t wait) {    
+  for(uint16_t j=0; j<6; j+=2) {
     uint16_t x=splitboxtotalarray[j];
     for(uint16_t k=0; k<x; k++) {
       matrix->setPixelColor(splitbigboxarray[j][k], c);  
@@ -209,9 +278,51 @@ void split_spiral_colorWipe(int c, uint16_t wait) {
       }
   }
 }
+//Fills the NeoMatrix 8X8 panel half a side at a time together in reverse
+void reverse_split_spiral_color_wipe(int c, uint16_t wait) {    
+  for(int j=5; j>=0; j-=2) {
+    int x=splitboxtotalarray[j];
+    for(int k=x-1; k>=0; k--) {
+      matrix->setPixelColor(splitbigboxarray[j][k], c);  
+      matrix->setPixelColor(splitbigboxarray[j-1][k], c);    
+      matrix->show();
+      delay(wait);
+      }
+  }
+}
 
+//Fills the NeoMatrix 8X8 panel half a side at a time together
+void one_pixel_split_spiral_color_wipe(int c, uint16_t wait) {    
+  for(int j=0; j<6; j+=2) {
+    int x=splitboxtotalarray[j];
+    for(int k=0; k<x; k++) {
+      matrix->setPixelColor(splitbigboxarray[j][k], c);  
+      matrix->setPixelColor(splitbigboxarray[j+1][k], c);    
+      matrix->show();
+      delay(wait);
+      matrix->setPixelColor(splitbigboxarray[j][k], 0);  
+      matrix->setPixelColor(splitbigboxarray[j+1][k], 0);    
+      matrix->show();
+      }
+  }
+}
+//Fills the NeoMatrix 8X8 panel half a side at a time together in reverse
+void reverse_one_pixel_split_spiral_color_wipe(int c, uint16_t wait) {    
+  for(int j=5; j>=0; j-=2) {
+    int x=splitboxtotalarray[j];
+    for(int k=x-1; k>=0; k--) {
+      matrix->setPixelColor(splitbigboxarray[j][k], c);  
+      matrix->setPixelColor(splitbigboxarray[j-1][k], c);   
+      matrix->show();
+      delay(wait);
+      matrix->setPixelColor(splitbigboxarray[j][k], 0);  
+      matrix->setPixelColor(splitbigboxarray[j-1][k], 0);    
+      matrix->show();
+      }
+  }
+}
 // Fills the NeoMatrix 8X8 panel in a spiral -  one neopixel after the other with only one neoPixel light at a time
-void onepixel_spiral_colorWipe(int c, uint16_t wait) {    
+void one_pixel_spiral_color_wipe(int c, uint16_t wait) {    
   for(uint16_t j=0; j<4; j++) {
    uint16_t x=boxtotalarray[j];
     for(uint16_t k=0; k<x; k++) {
@@ -225,22 +336,22 @@ void onepixel_spiral_colorWipe(int c, uint16_t wait) {
 }
 
 // Fills the NeoMatrix 8X8 panel in a spiral -  one neopixel after the other with only one neoPixel light at a time
-void reverse_onepixel_spiral_colorWipe(int c, uint16_t wait) {    
+void reverse_one_pixel_spiral_color_wipe(int c, uint16_t wait) {    
   
-  for(uint16_t j=0; j<4; j++) {
-    uint16_t x=revboxtotalarray[j];
-    for(uint16_t k=0; k<x; k++) {
-      matrix->setPixelColor(revbigboxarray[j][k], c);      
+  for(uint16_t j=3; j>=0; j--) {
+    uint16_t x=boxtotalarray[j];
+    for(uint16_t k=x-1; k>=0; k--) {
+      matrix->setPixelColor(bigboxarray[j][k], c);      
       matrix->show();
       delay(wait);
-      matrix->setPixelColor(revbigboxarray[j][k], 0);      
+      matrix->setPixelColor(bigboxarray[j][k], 0);      
       matrix->show();
      }
   }
 }
 
 // Fills the NeoMatrix 8X8 panel in a squares -  one square after the other
-void box_colorWipe(int c, uint16_t wait) {    
+void box_color_wipe(int c, uint16_t wait) {    
   
   for(uint16_t j=0; j<4; j++) {
     uint16_t x=boxtotalarray[j];
@@ -253,7 +364,7 @@ void box_colorWipe(int c, uint16_t wait) {
 }
 
 // Fills the NeoMatrix 8X8 panel - one square at a time
-void fullallbox_colorWipe(int c, uint16_t wait, uint8_t* boxarray, int x) { // Note: boxarray is the name of the array being used.  x is the number of members in the array being used.
+void full_all_box_color_wipe(int c, uint16_t wait, uint8_t* boxarray, int x) { // Note: boxarray is the name of the array being used.  x is the number of members in the array being used.
   
  for(uint16_t i=0; i<x; i++) {
     matrix->setPixelColor(boxarray[i], c);     
@@ -263,11 +374,39 @@ void fullallbox_colorWipe(int c, uint16_t wait, uint8_t* boxarray, int x) { // N
 } 
 
 // Fills the NeoMatrix 8X8 panel with all of the NeoPixes at one time 
-void colorallfill(int c, uint16_t wait) {  
+void color_all_fill(int c, uint16_t wait) {  
   for(uint16_t i=0; i<matrix->numPixels(); i++) {
     matrix->setPixelColor(i, c);      
     }       
     matrix->show();
     delay(wait);   
 }      
+/*  //test code
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycle(uint8_t wait) {
+  uint16_t i, j;
 
+  for(j=0; j<256; j++) { // cycle all colors
+    for(i=0; i< matrix->numPixels(); i++) {
+      matrix->setColor(i, Wheel(((i * 256 / matrix->.numPixels()) + j) & 255));
+    }
+    matrix->show();
+    delay(wait);
+  }
+}
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if (WheelPos < 85) {
+    return matrix->Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  if (WheelPos < 170) {
+    WheelPos -= 85;
+    return matrix->Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+  WheelPos -= 170;
+  return matrix->strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+} 
+*/ //end of test code
