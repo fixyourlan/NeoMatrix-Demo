@@ -1,6 +1,8 @@
 # NeoMatrix-Demo
 Testing some new Clone NeoMatrix boards running on a ESP8266
 
+https://www.ebay.com/itm/Hot-New-5V-WS2812B-8x8-64-5050-RGB-LED-Module-Matrix-Bright-Colors-for-Arduino/192495240536?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649
+
 ![]( https://github.com/fixyourlan/NeoMatrix-Demo/blob/master/Images/NeoMatrix.jpg )
 
 ![](https://github.com/fixyourlan/NeoMatrix-Demo/blob/master/Images/ESP8266%20Dev%20Board.jpg)
