@@ -1,5 +1,8 @@
+
 #define BRIGHTNESS 30
 #define LED_BLACK    0
+
+// for GRB Encoding
 
 #define LED_RED_VERYLOW   (3 <<  11)  //11
 #define LED_RED_LOW       (7 <<  11)
